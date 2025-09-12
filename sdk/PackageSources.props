@@ -1,8 +1,0 @@
-<Project>
-	<PropertyGroup>
-		<RestoreSources>
-			$(MSBuildThisFileDirectory)/packages;
-			$(RestoreSources)
-		</RestoreSources>
-	</PropertyGroup>
-</Project>
