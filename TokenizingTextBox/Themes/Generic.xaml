@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/TokenizingTextBox;component/Themes/Controls/TokenizingTextBox.xaml" />
+        <ResourceDictionary Source="/TokenizingTextBox;component/Themes/Controls/TokenizingTextBoxItem.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

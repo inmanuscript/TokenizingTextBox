@@ -17,8 +17,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\tokenizingtextbox\tokenizingtextbox.csproj" />
-  </ItemGroup>
-
 </Project>
