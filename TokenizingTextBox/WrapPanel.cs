@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -224,10 +225,12 @@ public partial class WrapPanel : Panel
             if (n == 0) return null;
 
             var child = VisualTreeHelper.GetChild(cur, 0);
-
-            if (child is Panel p)
+            // TokenInnerGridはTokenizingTextBoxItem固有の内部グリッドなのでスキップ
+            if (child is Panel p && p.Name != "TokenInnerGrid")
+            {
+                Debug.WriteLine($"Found Panel: {p.GetType().FullName}  {p.Name}");
                 return p;
-
+            }
             // Border, Decorator, ContentPresenterなど単一子ラッパーは1段だけ通す
             if (child is Border || child is Decorator || child is ContentPresenter)
             {
@@ -240,7 +243,6 @@ public partial class WrapPanel : Panel
 
         return null;
     }
-
     /// <inheritdoc />
     /// <summary>
     /// 子要素のサイズ計測（Measure）を行います。

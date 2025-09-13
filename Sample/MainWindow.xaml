@@ -14,7 +14,8 @@
                              ItemsSource="{Binding Labels}"
                              AcceptsReturn="True"
                              AcceptsTab="True"
-                             TokenDelimiter="," />
+                             TokenDelimiter=","
+                             ToolTip="This is a cake"/>
 
         <Grid>
             <Grid.ColumnDefinitions>

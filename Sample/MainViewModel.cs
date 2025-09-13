@@ -11,7 +11,6 @@ public class MainViewModel : ObservableObject
 
     private class LabelCollection : KeyedCollection<string, string>, INotifyCollectionChanged
     {
-        // Fix for CS8612: Make the event nullable to match the interface definition
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         protected override void ClearItems()

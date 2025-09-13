@@ -19,10 +19,33 @@
                             CornerRadius="2"
                             Padding="5,0">
 
-                        <ContentPresenter Name="ContentPresenter"
-                                          Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          VerticalAlignment="Center" />
+
+                        
+                        <!--<ContentPresenter Name="ContentPresenter"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              VerticalAlignment="Center" />-->
+                        
+                        <Grid x:Name="TokenInnerGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <ContentPresenter Name="ContentPresenter"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              VerticalAlignment="Center" />
+
+                            <Button x:Name="PART_RemoveButton"
+                                    Grid.Column="1"
+                                    Content="×"
+                                    Width="16"
+                                    Height="16"
+                                    Margin="5,0,0,0"
+                                    Padding="0"
+                                    VerticalAlignment="Center" />
+                        </Grid>
 
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">

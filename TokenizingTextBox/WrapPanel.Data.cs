@@ -1,31 +1,30 @@
 ﻿using System.Windows.Controls;
 
-namespace TokenizingTextBox
+namespace TokenizingTextBox;
+
+partial class WrapPanel
 {
-    partial class WrapPanel
+    [System.Diagnostics.DebuggerDisplay("U = {U} V = {V}")]
+    private struct UvMeasure
     {
-        [System.Diagnostics.DebuggerDisplay("U = {U} V = {V}")]
-        private struct UvMeasure
+        internal static readonly UvMeasure s_zero = default;
+
+        public UvMeasure(Orientation orientation, double width, double height)
         {
-            internal static readonly UvMeasure s_zero = default;
-
-            public UvMeasure(Orientation orientation, double width, double height)
+            if (orientation == Orientation.Horizontal)
             {
-                if (orientation == Orientation.Horizontal)
-                {
-                    U = width;
-                    V = height;
-                }
-                else
-                {
-                    U = height;
-                    V = width;
-                }
+                U = width;
+                V = height;
             }
-
-            internal double U { get; set; }
-
-            internal double V { get; set; }
+            else
+            {
+                U = height;
+                V = width;
+            }
         }
+
+        internal double U { get; set; }
+
+        internal double V { get; set; }
     }
 }

@@ -14,6 +14,8 @@
                 Value="Center" />
         <Setter Property="MinHeight"
                 Value="25" />
+        <Setter Property="ToolTip"
+                Value="{Binding Content, RelativeSource={RelativeSource Self}}" />
     </Style>
 
     <!--  Default style for TokenizingTextBox  -->
