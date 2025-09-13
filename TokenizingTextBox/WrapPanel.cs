@@ -206,8 +206,8 @@ public partial class WrapPanel : Panel
 
     /// <summary>
     /// 指定された FrameworkElement のテンプレート内から Panel を探索して取得します。
-    /// WPF の標準的なパターンに従い、GetTemplateChild や FindName を使用して
-    /// テンプレート内の Panel 要素を取得します。
+    /// WPF の標準的なパターンに従い、まずテンプレート内の名前付き Panel を探し、
+    /// 見つからない場合はビジュアルツリーを再帰的に探索します。
     /// </summary>
     /// <param name="element">探索対象の要素。</param>
     /// <returns>テンプレート内に見つかった Panel。見つからない場合は null。</returns>
@@ -218,11 +218,18 @@ public partial class WrapPanel : Panel
         {
             control.ApplyTemplate();
             
-            // 標準的なWPFパターン: 名前付きテンプレート部品を探す
-            // TokenizingTextBoxItemの場合、TokenInnerGridは内部実装の詳細なのでスキップ
-            if (control.Template?.FindName("PART_Panel", control) is Panel namedPanel)
+            // 標準的なWPFパターン: よく知られたテンプレート部品名を探す
+            if (control.Template != null)
             {
-                return namedPanel;
+                // 一般的なPanel部品名をチェック
+                var panelNames = new[] { "PART_WrapPanel", "PART_Panel", "PART_ItemsHost" };
+                foreach (var panelName in panelNames)
+                {
+                    if (control.Template.FindName(panelName, control) is Panel namedPanel)
+                    {
+                        return namedPanel;
+                    }
+                }
             }
         }
 
