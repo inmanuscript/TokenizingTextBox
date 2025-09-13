@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -206,39 +205,61 @@ public partial class WrapPanel : Panel
     }
 
     /// <summary>
-    /// 指定された FrameworkElement のビジュアルツリーを探索し、
-    /// テンプレートのルート要素が Panel であればそれを取得します。
-    /// .NET Framework の TemplateChild プロパティの代替として機能します。
-    /// 例えば、ControlTemplate内にPanelが含まれている場合、そのPanelを取得できます。
+    /// 指定された FrameworkElement のテンプレート内から Panel を探索して取得します。
+    /// WPF の標準的なパターンに従い、GetTemplateChild や FindName を使用して
+    /// テンプレート内の Panel 要素を取得します。
     /// </summary>
     /// <param name="element">探索対象の要素。</param>
-    /// <returns>テンプレートのルートである Panel。見つからない場合は null。</returns>
+    /// <returns>テンプレート内に見つかった Panel。見つからない場合は null。</returns>
     private static Panel? TryGetTemplateRootPanel(FrameworkElement element)
     {
         // Controlの場合はテンプレートを適用
-        if (element is Control c) c.ApplyTemplate();
-
-        DependencyObject cur = element;
-        for (int depth = 0; depth < 2; depth++)
+        if (element is Control control)
         {
-            int n = VisualTreeHelper.GetChildrenCount(cur);
-            if (n == 0) return null;
-
-            var child = VisualTreeHelper.GetChild(cur, 0);
-            // TokenInnerGridはTokenizingTextBoxItem固有の内部グリッドなのでスキップ
-            if (child is Panel p && p.Name != "TokenInnerGrid")
+            control.ApplyTemplate();
+            
+            // 標準的なWPFパターン: 名前付きテンプレート部品を探す
+            // TokenizingTextBoxItemの場合、TokenInnerGridは内部実装の詳細なのでスキップ
+            if (control.Template?.FindName("PART_Panel", control) is Panel namedPanel)
             {
-                Debug.WriteLine($"Found Panel: {p.GetType().FullName}  {p.Name}");
-                return p;
+                return namedPanel;
             }
-            // Border, Decorator, ContentPresenterなど単一子ラッパーは1段だけ通す
-            if (child is Border || child is Decorator || child is ContentPresenter)
+        }
+
+        // フォールバック: ビジュアルツリーを再帰的に探索
+        return FindDescendantPanel(element);
+    }
+
+    /// <summary>
+    /// 指定された要素の子孫から最初の Panel を再帰的に検索します。
+    /// TokenizingTextBoxItem 固有の TokenInnerGrid は内部実装詳細として除外します。
+    /// </summary>
+    /// <param name="parent">検索を開始する親要素。</param>
+    /// <returns>見つかった Panel。見つからない場合は null。</returns>
+    private static Panel? FindDescendantPanel(DependencyObject parent)
+    {
+        if (parent == null) return null;
+
+        for (int i = 0, count = VisualTreeHelper.GetChildrenCount(parent); i < count; i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            
+            // Panel が見つかった場合
+            if (child is Panel panel)
             {
-                cur = child;
-                continue;
+                // TokenInnerGrid は TokenizingTextBoxItem の内部実装詳細なのでスキップ
+                if (panel.Name != "TokenInnerGrid")
+                {
+                    return panel;
+                }
             }
 
-            return null;
+            // 再帰的に子要素を探索
+            var descendantPanel = FindDescendantPanel(child);
+            if (descendantPanel != null)
+            {
+                return descendantPanel;
+            }
         }
 
         return null;
